@@ -1,0 +1,296 @@
+
+<!--    RL 7-1-2019 re-indented code with 2 spaces per indent               
+    RL 13-1-2019 RLV6 Renamed myFunction() to initButton()              
+    RL 14-1-2019 RLV10added btnNr , btnY, btnX , btnRows, btnCols       
+                 changed height in wrapper and resp                     
+                 moved jquery lib upstairs otherwise console.log fails?  
+-->
+
+<!DOCTYPE html> 
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <style>                       /*setting up the div formatting*/
+      .wrapper{
+        max-width:950px;	  /* Create a screen wrapper of 960px*/
+        height: 650px;
+        margin: 0 auto;     /*Centers the wrapper*/
+        margin-top: 60px;   /*shifts wrapper below browser navigation bar*/
+        background-color:#cccccc;
+        border:2px solid #999999;
+        position: relative;
+        } 
+
+      .first{
+        border: 2px solid #999999; 
+        height:150px;
+        margin:5px;
+        background-color: #bfbfbf;
+        } 
+      
+      .resp{         /*call back div formatting*/
+        border: 2px solid #999999; 
+        height:150px;margin:5px;
+        background-color: #bfbfbf;
+        }  
+
+      #T3{           /*position of the text box*/
+        position: absolute; 
+        top: 425px;  
+        left:185px;
+        }		 
+
+      #responseText{      /*id returned here*/
+        position: absolute; 
+        top: 50px; 
+        left:10px; 
+        margin: 2px; 
+        font-size: 35px;
+        } 
+    </style>
+
+      
+
+  </head>
+	
+  <body>
+    
+	
+    <script src= "https://code.jquery.com/jquery-2.1.1.min.js" >;
+    console.log("main.js loaded"); 
+    </script> 
+    
+
+    <Div class="wrapper">
+
+    <Div class="first">
+      <button id="button_1">VHF. Hor.GP  </button>
+      <button id="button_2">VHF. Ver.Yagi</button>
+      <button id="button_3">VHF. Hor.Yagi</button>
+      <button id="button_4">VHF. Hor.Halo</button>
+      <button id="button_5">VHF. Pre.Amp </button>
+    </div>
+
+    <Div class="first">
+      <button id="button_6" >UHF. Hor.GP  </button>
+      <button id="button_7" >UHF. Ver.Yagi</button>
+      <button id="button_8" >UHF. Hor.Yagi</button>
+      <button id="button_9" >UHF. Hor.Halo</button>
+      <button id="button_10">UHF. Pre.Amp </button>
+    </div>
+
+    <Div class="first">
+      <button id="button_11" >Spare </button>
+      <button id="button_12" >Spare </button>
+      <button id="button_13" >Spare </button>
+      <button id="button_14" >Spare </button>
+      <button id="button_15" >SHF. Pre.Amp </button>
+    </div>
+
+    <Div class="resp">
+      <button id="button_16" >Toggle CallBack </button>
+    </div>
+
+    <div class="second">
+      <p id="T3">
+        <br>
+          <textarea
+            rows="2" 
+            cols="34"  
+            id="responseText">  
+          </textarea>
+        </p>
+    </div> //class = 'second'
+    </div> // RL   wrapper
+	
+  <script>  
+    $(document).ready (function(){ //RL ensure DOM has been constructed and
+                    // all HTML has been loaded before loading js code
+      $("#T3").hide();
+				
+      var i=0;	//Variable for the toggle row 1
+      var j=0;  //Variable for the toggle row 2
+      var k=0;  //Variable for the toggle row 3
+      var btnCols=5;            // RL number of buttons per row
+      var btnRows = 4;          // RL number of button rows
+
+      // RL Draw buttons with button ID button_1-16 on idicated positions
+  /*    initButton("#button_1", 30,    20);
+      initButton("#button_2", 30,   200);
+      initButton("#button_3", 30,   380);
+      initButton("#button_4", 30,   560);
+      initButton("#button_5", 30,   760);
+
+      initButton("#button_6", 190,   20);
+      initButton("#button_7", 190,  200);
+      initButton("#button_8", 190,  380);
+      initButton("#button_9", 190,  560);
+      initButton("#button_10",190,  760);
+
+      initButton("#button_11", 350,  20);
+      initButton("#button_12", 350, 200);
+      initButton("#button_13", 350, 380);
+      initButton("#button_14", 350, 560);
+      initButton("#button_15", 350, 760);
+
+      initButton("#button_16", 490,  20);
+	*/
+      for(btnRow=1;btnRow<5;btnRow++){
+        for(btnCol=1;btnCol<(btnCols + 1);btnCol++){
+          btnNr = (btnCol+((btnRow-1)*(btnRows+1)));
+          btnY = (30+(btnRow-1)*160);
+          btnX= (20+(btnCol-1)*180);
+     //     console.log("btnNr = "+btnNr + " btnY = " + btnY + " btnX = " + btnX);
+          if(btnNr<17)
+          initButton("#button_"+btnNr,btnY,btnX); 
+          } // end of for btnRow
+        } // end of for btnCol
+        	
+    $("#button_1").click(function(){//RL $(xyz) means getElementById(xyz)
+      $("#button_2, #button_3, #button_4").css('background-color', '#F0F8FF')
+                                          .css('color', 'black');
+      $(this)
+       .css ('background-color', 'red')
+       .css('color', 'white');
+      $.post("", 
+        {mydata : 1}, // RL object initialization (oject literal)
+        function(data){ //RL  lambda function definition
+          $("#responseText").val(data); //RL ?? property val(data)of object#responsetext 
+          } // RL  end of defination function(data)
+      );         //GW end of post function	
+    }); 	  	//GW end of click function
+
+
+$("#button_2").click(function(){
+$("#button_1, #button_3, #button_4").css('background-color', '#F0F8FF').css('color', 'black');
+$(this).css ('background-color', 'red').css('color', 'white');
+$.post("http://192.168.178.64", {mydata : 2},       function(data){ $("#responseText").val(data);}
+); 	       	//end of post function
+});           	//end of click function
+
+
+$("#button_3").click(function(){
+$("#button_1, #button_2, #button_4").css('background-color', '#F0F8FF').css('color', 'black');
+$(this).css ('background-color', 'red').css('color', 'white');
+
+$.post("http://192.168.178.64", {mydata : 3},       function(data){ $("#responseText").val(data);}
+);             	//end of post function
+});           	//end of click function
+
+$("#button_4").click(function(){
+$("#button_1, #button_2, #button_3").css('background-color', '#F0F8FF').css('color', 'black');
+$(this).css ('background-color', 'red').css('color', 'white');
+$.post("http://192.168.178.64", {mydata : 4},       function(data){ $("#responseText").val(data);}
+);             	//end of post function
+});           	//end of click function
+
+$("#button_5").click(function(){
+if(i==0){$(this).css ('background-color', 'red').css('color', 'white'); i=1;}
+else{$(this).css('background-color', '#F0F8FF').css('color', 'black');  i=0;}
+$.post("http://192.168.178.64", {mydata : 13},       function(data){ $("#responseText").val(data);}
+); 		 //end of post function
+});           	//end of click function
+
+/*---------------------------End of row one click functions--------------------------------*/
+
+$("#button_6").click(function(){
+$("#button_7, #button_8, #button_9").css('background-color', '#F0F8FF').css('color', 'black');
+$(this).css ('background-color', 'red').css('color', 'white');
+$.post("http://192.168.178.64", {mydata : 5},       function(data){ $("#responseText").val(data);}
+);              //end of post function
+});             //end of click function
+
+
+$("#button_7").click(function(){
+$("#button_6, #button_8, #button_9").css('background-color', '#F0F8FF').css('color', 'black');
+$(this).css ('background-color', 'red').css('color', 'white');
+$.post("http://192.168.178.64", {mydata : 6},       function(data){ $("#responseText").val(data);}
+);              //end of post function
+});             //end of click function
+
+$("#button_8").click(function(){
+$("#button_6, #button_7, #button_9").css('background-color', '#F0F8FF').css('color', 'black');
+$(this).css ('background-color', 'red').css('color', 'white');
+
+$.post("http://192.168.178.64", {mydata : 7},       function(data){ $("#responseText").val(data);}
+);              //end of post function
+});             //end of click function
+
+$("#button_9").click(function(){
+$("#button_6, #button_7, #button_8").css('background-color', '#F0F8FF').css('color', 'black');
+$(this).css ('background-color', 'red').css('color', 'white');
+$.post("http://192.168.178.64", {mydata : 8},       function(data){ $("#responseText").val(data);}
+);              //end of post function
+});             //end of click function
+
+$("#button_10").click(function(){
+if(j==0){$(this).css ('background-color', 'red').css('color', 'white'); j=1;}
+else{$(this).css('background-color', '#F0F8FF').css('color', 'black');  j=0;}
+$.post("http://192.168.178.64", {mydata : 14},       function(data){ $("#responseText").val(data);}
+);               //end of post function
+});             //end of click function
+
+/*---------------------------End of row two click functions--------------------------------*/
+
+$("#button_11").click(function(){
+$("#button_12, #button_13, #button_14").css('background-color', '#F0F8FF').css('color', 'black');
+$(this).css ('background-color', 'red').css('color', 'white');
+$.post("http://192.168.178.64", {mydata : 9},       function(data){ $("#responseText").val(data);}
+);              //end of post function
+});             //end of click function
+
+
+$("#button_12").click(function(){
+$("#button_11, #button_13, #button_14").css('background-color', '#F0F8FF').css('color', 'black');
+$(this).css ('background-color', 'red').css('color', 'white');
+$.post("http://192.168.178.64", {mydata : 10},       function(data){ $("#responseText").val(data);}
+);              //end of post function
+});             //end of click function
+
+$("#button_13").click(function(){
+$("#button_11, #button_12, #button_14").css('background-color', '#F0F8FF').css('color', 'black');
+$(this).css ('background-color', 'red').css('color', 'white');
+
+$.post("http://192.168.178.64", {mydata : 11},       function(data){ $("#responseText").val(data);}
+);              //end of post function
+});             //end of click function
+
+$("#button_14").click(function(){
+$("#button_11, #button_12, #button_13").css('background-color', '#F0F8FF').css('color', 'black');
+$(this).css ('background-color', 'red').css('color', 'white');
+$.post("http://192.168.178.64", {mydata : 12},       function(data){ $("#responseText").val(data);}
+);              //end of post function
+});             //end of click function
+
+$("#button_15").click(function(){
+if(k==0){$(this).css ('background-color', 'red').css('color', 'white'); k=1;}
+else{$(this).css('background-color', '#F0F8FF').css('color', 'black');  k=0;}
+$.post("http://192.168.178.64", {mydata : 15},       function(data){ $("#responseText").val(data);}
+);               //end of post function
+});             //end of click function
+
+/*---------------------------End of row three  click functions-----------------------------*/
+
+$("#button_16").click(function(){
+  $("#T3").toggle();
+  }  // RL end of function() definition
+  );		
+
+});  		//end of doc ready	
+
+/*-----------------------------myCustom Functions-------------------------------------------*/
+
+function initButton(button, y, x){
+  $(button)
+    .css('position', 'absolute')
+    .css('top' ,   y)
+    .css('left',   x)
+    .css( 'width','168px')
+    .css('height','100px')
+    .css('background-color','#F0F8FF')
+    .css('font-size','30px');
+    }		//Positioning and formatting buttons
+	
+    </script>
+  </body>	
+</html>
